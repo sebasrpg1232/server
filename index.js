@@ -51,15 +51,37 @@ app.get("/products", ( req, res) => {
 //   });
 });
 
-
-  app.get("/image", ( req, res, next) => {
-    let params = req.query.imagen
-  db.query("select * from images where referencia = ?",[params], function(err, result, fields){
+app.get("/usuarios", ( req, res) => {
+  db.query("select * from usuarios", function(err, result, fields){
     if(err) throw err;
     console.log("result" +result);
     res.send(result);
   })
-})
+});
+app.post("/registrar", (req, res) => {
+  const correo = req.body.correo
+  const pass = req.body.pass
+  db.query('INSERT INTO usuarios (correo, pass) VALUES (?,?)',[correo, pass],
+  (err, result)=>{
+      if(err){
+          console.log(err)
+      }else{
+          res.send("Usuario creado")
+      }
+  }
+  
+  );
+});
+
+
+//   app.get("/image", ( req, res, next) => {
+//     let params = req.query.imagen
+//   db.query("select * from images where referencia = ?",[params], function(err, result, fields){
+//     if(err) throw err;
+//     console.log("result" +result);
+//     res.send(result);
+//   })
+// })
 
 app.listen(3002,()=> {
     console.log("Corriendo en el puerto 3002")
